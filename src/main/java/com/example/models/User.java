@@ -19,6 +19,9 @@ public class User {
 		this.phone = phone;
 		setId();
 	}
+	public String toString() {
+		return email + " " +  passwd + " " + name + " " +  phone;
+	}
 	public UUID getId() {
 		return id;
 	}

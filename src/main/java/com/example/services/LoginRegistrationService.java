@@ -29,13 +29,16 @@ public class LoginRegistrationService {
 
 		String uuid = "NO MATCH";
 		User u = (User) userhm.get(user);
-uuid += " " + u.getEmail();
+
+
+			uuid = uuid + u.toString();
+		
 	//	if(u != null) { // if in the db
 			
-			if(u.getPasswd().equals(passwd))  
-				uuid = u.getId().toString();  // get uuid
-			else
-				uuid = "PASSWORD INCORRECT";
+//			if(u.getPasswd().equals(passwd))  
+//				uuid = u.getId().toString();  // get uuid
+//			else
+//				uuid = "PASSWORD INCORRECT";
 			/****
 			try {  // is there a match
                 
