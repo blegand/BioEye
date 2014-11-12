@@ -37,7 +37,8 @@ public class User {
 	public void setPasswd(String passwd) {
 
 		try {
-			this.passwd = new MD5().getMD5Hex(passwd);     // store MD5 Hash
+			MD5 m = new MD5();
+			this.passwd = m.getMD5Hex(passwd);     // store MD5 Hash
 		} catch (NoSuchAlgorithmException e) {
 			this.passwd = passwd;
 		}
