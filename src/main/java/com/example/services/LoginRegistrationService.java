@@ -43,9 +43,8 @@ public class LoginRegistrationService {
 			}
 			*/
 		}
-		try{
-		uuid = uuid + " " + MD5.getMD5Hex(passwd);
-		}catch (NoSuchAlgorithmException e) {}
+		uuid = uuid + " " + passwd;
+	
 		return uuid;
 	}
 
