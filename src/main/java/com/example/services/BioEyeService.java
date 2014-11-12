@@ -15,46 +15,46 @@ package com.example.services;
  * 
  * 
  * LOGIN to BIOEYE, returns UUID, "No Match" on error
- * www.xxx.com/bioeye/login/{email}/{passwd}
+ * www.xxx.com/services/bioeye/login/{email}/{passwd}
  * 
  * REGISTER to BIOEYE, returns UUID on success, "Duplicate" on error
- * www.xxx.com/bioeye/register/{email}/{passwd}/{phone}/{name}
+ * www.xxx.com/services/bioeye/register/{email}/{passwd}/{phone}/{name}
  * 
  * CREATE A Bacteria Growth Curve (bgc), returns ID of bgc record
- * www.xxx.com/bioeye/createGC/{uuid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}
+ * www.xxx.com/services/bioeye/createGC/{uuid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}
  * 
  * DELETE A Bacteria Growth Curve (bgc), returns "ACK" for success, "Invalid Key" no success
- * www.xxx.com/bioeye/deleteGC/{uuid}/{bgcid}
+ * www.xxx.com/services/bioeye/deleteGC/{uuid}/{bgcid}
  * 
  * UPDATE A Bacteria Growth Curve (bgc), returns ID of bgc record,  "Invalid Key" on error
- * www.xxx.com/bioeye/updateGC/{uuid}/{bgcid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}
+ * www.xxx.com/services/bioeye/updateGC/{uuid}/{bgcid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}
  * 
  * RETRIEVE ALL Bacteria Growth Curve Objects modified after time ts owned by UUID, ts is the last time you queried. Phone needs to keep track of ts
- * www.xxx.com/bioeye/getAllGC/{uuid}/{ts}
+ * www.xxx.com/services/bioeye/getAllGC/{uuid}/{ts}
  * 
  * RETRIEVE ALL Bacteria Growth Curve Objects
- * www.xxx.com/bioeye/getAllGC/{uuid}
+ * www.xxx.com/services/bioeye/getAllGC/{uuid}
  * 
  * UPDATE access to Bacteria Growth Curve Object (bgc) to user UIDRole : creator,delete, detect, edit are boolean (true or false)
- * www.xxx.com/bioeye/updateGCRole/{uuid}/{bgcid}/{uidRole}/{creator}/{delete}/{detect}/{edit}/{share}
+ * www.xxx.com/services/bioeye/updateGCRole/{uuid}/{bgcid}/{uidRole}/{creator}/{delete}/{detect}/{edit}/{share}
  * 
  * ADD access to Bacteria Growth Curve Object (bgc) to user UIDRole : creator,delete, detect, edit are boolean (true or false)
- * www.xxx.com/bioeye/addGCRole/{uuid}/{bgcid}/{uidRole}/{creator}/{delete}/{detect}/{edit}/{share}
+ * www.xxx.com/services/bioeye/addGCRole/{uuid}/{bgcid}/{uidRole}/{creator}/{delete}/{detect}/{edit}/{share}
  * 
  * DELETE access to Bacteria Growth Curve Object (bgc) to user UIDRole
- * www.xxx.com/bioeye/delGCRole/{uuid}/{bgcid}/{uidRole}
+ * www.xxx.com/services/bioeye/delGCRole/{uuid}/{bgcid}/{uidRole}
  * 
  * ADD PHOTO (POST) with Optical Density (for training) to Bacteria Growth Curve Object (bgcid), return photoID
- * www.xxx.com/bioeye/addODPhoto/{uuid}/{bgcid}/{od}/{ts}
+ * www.xxx.com/services/bioeye/addODPhoto/{uuid}/{bgcid}/{od}/{ts}
  * 
  * DELETE PHOTO with Optical Density (for training) to Bacteria Growth Curve Object (bgcid)
- * www.xxx.com/bioeye/delODPhoto/{uuid}/{bgcid}/{photoID}
+ * www.xxx.com/services/bioeye/delODPhoto/{uuid}/{bgcid}/{photoID}
  * 
  * GENERATE MODEL for Bacteria Growth Curve Object (bgcid), returns bgcid on success
- * www.xxx.com/bioeye/generateModel/{uuid}/{bgcid}
+ * www.xxx.com/services/bioeye/generateModel/{uuid}/{bgcid}
  * 
  * DETECT OD from file (POST), based on Bacteria Growth Curve Object (bgcid), return ACK:<estimated OD reading>
- * www.xxx.com/bioeye/detect/{uuid}/{bgcid}
+ * www.xxx.com/services/bioeye/detect/{uuid}/{bgcid}
  * 
  * 
  */
