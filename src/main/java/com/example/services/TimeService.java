@@ -24,14 +24,14 @@ public class TimeService {
     
     @GET
     @Path("/{timezone}")
-    public int get(@PathParam("timezone") String timezone) {
+    public Time get(@PathParam("timezone") String timezone) {
     	Time t = new Time(TimeZone.getTimeZone(timezone.toUpperCase()));
     	
         // Put elements to the map
-        hm.put("Zara"+t.hashCode(), t);
+      //  hm.put("Zara"+t.hashCode(), t);
        
     
-        return hm.size();
+        return t; //hm.size();
     }
 }
 
