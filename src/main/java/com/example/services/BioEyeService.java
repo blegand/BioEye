@@ -92,5 +92,22 @@ public class BioEyeService {
 		
 		return uuid;
 	}
+	
+	// DELETE Bacteria Growth Curve Object
+	@GET
+	@Path("/deleteGC/{uuid}/{bgcid}")
+	public String set(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid) {
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+			
+			bgchm.remove(bgcid);
+			uuid = "ACK";
+			 
+		}
+		
+		return uuid;
+	}
 }
 
