@@ -35,12 +35,14 @@ public class User {
 		return passwd;
 	}
 	public void setPasswd(String passwd) {
-
+        /*****
 		try {
 			this.passwd = MD5.getMD5Hex(passwd);     // store MD5 Hash
 		} catch (NoSuchAlgorithmException e) {
 			this.passwd = passwd;
 		}
+		****/
+		this.passwd = passwd;
 	}
 	
 	public String getName() {

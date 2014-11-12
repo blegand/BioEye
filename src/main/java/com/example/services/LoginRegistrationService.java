@@ -31,6 +31,12 @@ public class LoginRegistrationService {
 		User u = (User) userhm.get(user);
 
 		if(u != null) { // if in the db
+			
+			if(u.getPasswd().equals(passwd))  
+				uuid = u.getId().toString();  // get uuid
+			else
+				uuid = "PASSWORD INCORRECT";
+			/****
 			try {  // is there a match
                 
 				if(u.getPasswd().equals(MD5.getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
@@ -40,6 +46,7 @@ public class LoginRegistrationService {
 			} catch (NoSuchAlgorithmException e) {
 
 			}
+			***/
 		}
 
 		return uuid;
