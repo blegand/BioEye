@@ -147,7 +147,7 @@ public class BioEyeService {
 	// RETRIEVE ALL Bacteria Growth Curve Object
 	@GET
 	@Path("/getAllGC/{uuid}")
-	public BacteriaGrowthCurve[] get(@PathParam("uuid") String uid){
+	public Object[] get(@PathParam("uuid") String uid){
 		ArrayList<BacteriaGrowthCurve> bgcList = new ArrayList<BacteriaGrowthCurve>();
 		
 		String id = (String) idhm.get(uid);  //user id
@@ -176,7 +176,7 @@ public class BioEyeService {
 			}
 		}
 		
-		return (BacteriaGrowthCurve[]) bgcList.toArray();
+		return  bgcList.toArray();
 	}
 	
 	
