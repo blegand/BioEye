@@ -4,12 +4,12 @@
  * 
  * 
  * 
- # BIO EYE RESTFUL SERVICE
+ * BIO EYE RESTFUL SERVICE
  * 
  * 
- # QUERY THIS SERVICE BY ISSUING GET COMMANDS BELOW. ONLY TWO COMMAND ARE POST (they upload files).
- # NOTE: ALL COMMANDS MUST PROVIDE A UUID, with the exception of the login and register. 
- # Both Login and Register returns the UUID (Unique Id). BIOEye has no real authentication.
+ * QUERY THIS SERVICE BY ISSUING GET COMMANDS BELOW. ONLY TWO COMMAND ARE POST (they upload files).
+ * NOTE: ALL COMMANDS MUST PROVIDE A UUID, with the exception of the login and register. 
+ * Both Login and Register returns the UUID (Unique Id). BIOEye has no real authentication.
  * 
  * 
  * LOGIN to BIOEYE, returns UUID, "No Match" on error
