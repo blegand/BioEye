@@ -14,7 +14,7 @@ public class User {
 
 	public User(String email, String passwd, String name, String phone) {
 		this.email = email;
-		setPasswd(passwd);
+		this.passwd = passwd;
 		this.name = name;
 		this.phone = phone;
 		setId();
@@ -38,14 +38,12 @@ public class User {
 		return passwd;
 	}
 	public void setPasswd(String passwd) {
-        /*****
+
 		try {
 			this.passwd = MD5.getMD5Hex(passwd);     // store MD5 Hash
 		} catch (NoSuchAlgorithmException e) {
 			this.passwd = passwd;
 		}
-		****/
-		this.passwd = passwd;
 	}
 	
 	public String getName() {
