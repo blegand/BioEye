@@ -29,16 +29,16 @@ package com.example.services;
  * UPDATE A Bacteria Growth Curve (bgc), returns ID of bgc record,  "Invalid Key" on error
  * www.xxx.com/bioeye/updateGC/{uuid}/{bgcid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}
  * 
- * RETRIEVE ALL Bacteria Growth Curve Objects modified after time ts owned by UUID
+ * RETRIEVE ALL Bacteria Growth Curve Objects modified after time ts owned by UUID, ts is the last time you queried. Phone needs to keep track of ts
  * www.xxx.com/bioeye/getAllGC/{uuid}/{ts}
  * 
  * RETRIEVE ALL Bacteria Growth Curve Objects
  * www.xxx.com/bioeye/getAllGC/{uuid}
  * 
- * UPDATE access to Bacteria Growth Curve Object (bgc) to user UIDRole
+ * UPDATE access to Bacteria Growth Curve Object (bgc) to user UIDRole : creator,delete, detect, edit are boolean (true or false)
  * www.xxx.com/bioeye/updateGCRole/{uuid}/{bgcid}/{uidRole}/{creator}/{delete}/{detect}/{edit}/{share}
  * 
- * ADD access to Bacteria Growth Curve Object (bgc) to user UIDRole
+ * ADD access to Bacteria Growth Curve Object (bgc) to user UIDRole : creator,delete, detect, edit are boolean (true or false)
  * www.xxx.com/bioeye/addGCRole/{uuid}/{bgcid}/{uidRole}/{creator}/{delete}/{detect}/{edit}/{share}
  * 
  * DELETE access to Bacteria Growth Curve Object (bgc) to user UIDRole
