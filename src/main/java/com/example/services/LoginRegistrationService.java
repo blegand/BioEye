@@ -25,16 +25,16 @@ public class LoginRegistrationService {
 
 	@GET
 	@Path("/login/{user}/{pass}")
-	public String get(@PathParam("user") String user, @PathParam("passwd") String passwd) {
+	public User get(@PathParam("user") String user, @PathParam("passwd") String passwd) {
 
 		String uuid = "NO MATCH";
 		User u = (User) userhm.get(user);
 
-		if(u != null) { // if in the db
-			/*
+	//	if(u != null) { // if in the db
+			
 			if(u.getPasswd().equals(passwd))  
 				uuid = u.getId().toString();  // get uuid
-			else*/
+			else
 				uuid = "PASSWORD INCORRECT";
 			/****
 			try {  // is there a match
@@ -47,9 +47,9 @@ public class LoginRegistrationService {
 
 			}
 			***/
-		}
+	//	}
 
-		return uuid;
+		return u; //uuid;
 	}
 
 	@GET
