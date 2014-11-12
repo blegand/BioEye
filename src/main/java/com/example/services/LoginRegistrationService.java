@@ -32,9 +32,8 @@ public class LoginRegistrationService {
 
 		if(u != null) { // if in the db
 			try {  // is there a match
-                MD5 m = new MD5();
                 
-				if(u.getPasswd().equals(m.getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
+				if(u.getPasswd().equals(MD5.getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
 					uuid = u.getId().toString();  // get uuid
 				else
 					uuid = "PASSWORD INCORRECT";
