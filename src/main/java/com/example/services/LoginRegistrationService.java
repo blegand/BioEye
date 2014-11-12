@@ -67,7 +67,7 @@ public class LoginRegistrationService {
 			uuid = u.getId().toString();
 		}
 
-		return uuid;
+		return uuid +u;
 	}
 }
 

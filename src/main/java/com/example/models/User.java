@@ -20,7 +20,7 @@ public class User {
 		setId();
 	}
 	public String toString() {
-		return email + " " +  passwd + " " + name + " " +  phone;
+		return email + " " +  passwd + " " + name + " " +  phone + " " + id.toString();
 	}
 	public UUID getId() {
 		return id;
