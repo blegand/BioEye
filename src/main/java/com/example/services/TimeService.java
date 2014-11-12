@@ -30,9 +30,7 @@ public class TimeService {
         // Put elements to the map
         hm.put("Zara", t);
        
-     // Create a hash map
-        HashMap hm = new HashMap();
-       
+    
         return hm;
     }
 }
