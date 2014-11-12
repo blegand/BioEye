@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/time")
 @Produces(MediaType.APPLICATION_JSON)
 public class TimeService {
-
+    
 	static HashMap hm = new HashMap();
     @GET
     public Time get() {
