@@ -16,7 +16,7 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class LoginRegistrationService {
 
-	static HashMap userhm = new HashMap();   // user db
+	static HashMap<String, User> userhm = new HashMap<String, User>();   // user db
 	@GET
 	public User get() {
 		return new User("xxx@yahoo.com", "1234abcd", "Mr. XXX YYYY", "202-234-5678");
@@ -30,16 +30,8 @@ public class LoginRegistrationService {
 		String uuid = "NO MATCH";
 		User u = (User) userhm.get(user);
 
-
-			uuid = uuid + u.toString();
-		
-	//	if(u != null) { // if in the db
+		if(u != null) { // if in the db
 			
-//			if(u.getPasswd().equals(passwd))  
-//				uuid = u.getId().toString();  // get uuid
-//			else
-//				uuid = "PASSWORD INCORRECT";
-			/****
 			try {  // is there a match
                 
 				if(u.getPasswd().equals(MD5.getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
@@ -49,14 +41,13 @@ public class LoginRegistrationService {
 			} catch (NoSuchAlgorithmException e) {
 
 			}
-			***/
-	//	}
+		}
 
 		return uuid;
 	}
 
 	@GET
-	@Path("/register/{user}/{pass}/{phone}/{name}")
+	@Path("/register/{user}/{passwd}/{phone}/{name}")
 	public String get(@PathParam("user") String user, @PathParam("passwd") String passwd, @PathParam("phone") String phone, @PathParam("name") String name) {
 		String uuid = "Duplicate";
 		User u = (User) userhm.get(user);

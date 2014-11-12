@@ -14,7 +14,7 @@ public class User {
 
 	public User(String email, String passwd, String name, String phone) {
 		this.email = email;
-		this.passwd = passwd;
+		setPasswd(passwd);
 		this.name = name;
 		this.phone = phone;
 		setId();
