@@ -30,12 +30,14 @@ public class LoginRegistrationService {
 		String uuid = "NONE";
 		User u = (User) userhm.get(user);
 
-		try {
+		if(u != null) { // if in the db
+			try {  // is there a match
 
-			if(u.getPasswd().equals(new MD5().getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
-				uuid = u.getId().toString();  // get uuid
-		} catch (NoSuchAlgorithmException e) {
+				if(u.getPasswd().equals(new MD5().getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
+					uuid = u.getId().toString();  // get uuid
+			} catch (NoSuchAlgorithmException e) {
 
+			}
 		}
 
 		return uuid;
