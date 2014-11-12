@@ -28,7 +28,7 @@ public class TimeService {
     	Time t = new Time(TimeZone.getTimeZone(timezone.toUpperCase()));
     	
         // Put elements to the map
-        hm.put("Zara", t);
+        hm.put("Zara"+t.hashCode(), t);
        
     
         return hm.size();
