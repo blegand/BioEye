@@ -1,5 +1,6 @@
 package com.example.services;
 
+import java.util.HashMap;
 import java.util.TimeZone;
 
 import com.example.models.Time;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.APPLICATION_JSON)
 public class TimeService {
 
+	static HashMap hm = new HashMap();
     @GET
     public Time get() {
         return new Time();
@@ -23,7 +25,9 @@ public class TimeService {
     @GET
     @Path("/{timezone}")
     public Time get(@PathParam("timezone") String timezone) {
-        return new Time(TimeZone.getTimeZone(timezone.toUpperCase()));
+    	Time t = new Time(TimeZone.getTimeZone(timezone.toUpperCase()));
+    	
+        return t;
     }
 }
 
