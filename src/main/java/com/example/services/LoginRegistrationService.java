@@ -31,10 +31,10 @@ public class LoginRegistrationService {
 		User u = (User) userhm.get(user);
 
 		if(u != null) { // if in the db
-			
+			/*
 			if(u.getPasswd().equals(passwd))  
 				uuid = u.getId().toString();  // get uuid
-			else
+			else*/
 				uuid = "PASSWORD INCORRECT";
 			/****
 			try {  // is there a match
