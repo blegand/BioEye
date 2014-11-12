@@ -31,15 +31,30 @@ public class BacteriaGrowthCurve {
 		this.temp = tmp;
 		this.rpm = rpm;
 		setId();
-		this.tstamp = Calendar.getInstance().getTime();
+		setTstamp();
+	}
+	
+	public HashMap<String, GCRoles> getAccessList() {
+		return accessList;
 	}
 	
 	public void addRole(GCRoles gcr, String uid) {
 		accessList.put(uid, gcr);
 	}
 	
-	public void delRole(String uid){
-		accessList.remove(uid);
+	public void updateRole(String uid, boolean c, boolean del, boolean det, boolean e, boolean s) {
+		GCRoles gcr = (GCRoles) accessList.get(uid);
+		gcr.setCreator(c);
+		gcr.setDelete(del);
+		gcr.setDetect(det);
+		gcr.setEdit(e);
+		gcr.setShare(s);
+		
+		accessList.put(uid, gcr);
+	}
+	
+	public GCRoles delRole(String uid){
+		return accessList.remove(uid);
 	}
 	
 	public UUID getId() {
@@ -93,8 +108,8 @@ public class BacteriaGrowthCurve {
 	public Date getTstamp() {
 		return tstamp;
 	}
-	public void setTstamp(Date tstamp) {
-		this.tstamp = tstamp;
+	public void setTstamp() {
+		this.tstamp = Calendar.getInstance().getTime();
 	}
 	
 

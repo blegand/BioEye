@@ -1,7 +1,11 @@
 package com.example.services;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.example.models.BacteriaGrowthCurve;
 import com.example.models.GCRoles;
@@ -104,6 +108,156 @@ public class BioEyeService {
 			
 			bgchm.remove(bgcid);
 			uuid = "ACK";
+			 
+		}
+		
+		return uuid;
+	}
+	
+	// UPDATE Bacteria Growth Curve Object
+	@GET
+	@Path("/updateGC/{uuid}/{bgcid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}")
+	public String get(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid,@PathParam("title") String title, @PathParam("bac") String bac, @PathParam("bVol") double bVol, @PathParam("mVol") double mVol, @PathParam("temp") double temp, @PathParam("rpm") double rpm) {
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+			
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+			
+			if(bgc != null) {
+				bgc.setTitle(title);
+				bgc.setBacteria(bac);
+				bgc.setbVol(bVol);
+				bgc.setmVol(mVol);
+				bgc.setTemp(temp);
+				bgc.setRpm(rpm);
+	            bgc.setTstamp();
+	            
+				uuid = bgc.getId().toString();  // return ID of Bacteria Growth Curve record
+				bgchm.put(uuid,  bgc);
+			}
+			 
+		}
+		
+		return uuid;
+	}
+	
+	// RETRIEVE ALL Bacteria Growth Curve Object
+	@GET
+	@Path("/getAllGC/{uuid}")
+	public BacteriaGrowthCurve[] get(@PathParam("uuid") String uid){
+		ArrayList<BacteriaGrowthCurve> bgcList = new ArrayList<BacteriaGrowthCurve>();
+		
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+			
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc; 
+			
+			Iterator<Entry<String, BacteriaGrowthCurve>> itb = bgchm.entrySet().iterator();
+			while (itb.hasNext()) {
+				Map.Entry<String, BacteriaGrowthCurve> pairs = (Map.Entry<String, BacteriaGrowthCurve>) itb.next();
+				bgc = (BacteriaGrowthCurve) pairs.getValue();
+				
+				// Get GCRoles Object
+				GCRoles gcr;
+				Iterator<Entry<String, GCRoles>> itg = bgc.getAccessList().entrySet().iterator();
+				while (itg.hasNext()) {
+					Map.Entry<String, GCRoles> pairs2 = (Map.Entry<String, GCRoles>) itg.next();
+					gcr = (GCRoles) pairs2.getValue();
+					if(gcr.getId().equals(id)) {
+						bgcList.add(bgc);
+						break;
+					}
+				}
+			}
+		}
+		
+		return (BacteriaGrowthCurve[]) bgcList.toArray();
+	}
+	
+	
+	
+	// UPDATE Role Bacteria Growth Curve Object
+	@GET
+	@Path("/updateGCRole/{uuid}/{bgcid}/{uidRole}/{c}/{del}/{det}/{e}/{s}")
+	public String set(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid, @PathParam("uidRole") String uidRole, @PathParam("c") boolean c, @PathParam("del") boolean del, @PathParam("det") boolean det, @PathParam("e") boolean e, @PathParam("s") boolean s) {
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+			
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+			
+			if(bgc != null) {
+				
+				bgc.updateRole(uidRole, c, del, det, e, s);
+				bgc.setTstamp();
+				uuid = "ACK";
+			}
+			else
+				uuid = "NACK: Bacteria Growth Curve Does Not Exist";
+			
+			 
+		}
+		
+		return uuid;
+	}
+	
+	// ADD Role Bacteria Growth Curve Object
+	@GET
+	@Path("/addGCRole/{uuid}/{bgcid}/{uidRole}/{c}/{del}/{det}/{e}/{s}")
+	public String get(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid, @PathParam("uidRole") String uidRole, @PathParam("c") boolean c, @PathParam("del") boolean del, @PathParam("det") boolean det, @PathParam("e") boolean e, @PathParam("s") boolean s) {
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+			
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+			
+			if(bgc != null) {
+				
+				bgc.addRole(new GCRoles(uidRole, c, del, det, e, s), uidRole);
+				bgc.setTstamp();
+				
+				uuid = "ACK";
+			}
+			else
+				uuid = "NACK: Bacteria Growth Curve Does Not Exist";
+			
+			 
+		}
+		
+		return uuid;
+	}
+	
+	// DELETE Role Bacteria Growth Curve Object
+	@GET
+	@Path("/delGCRole/{uuid}/{bgcid}/{uidRole}")
+	public String get(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid, @PathParam("uidRole") String uidRole) {
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+			
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+			
+			if(bgc != null) {  // sucess in accessing the Bac Growth Curve Object
+				
+				if((bgc.delRole(uidRole)) != null)  // delete the role
+				    uuid = "ACK";
+				else
+					uuid = "NACK: Role Does Not Exist";
+			}
+			else
+				uuid = "NACK: Bacteria Growth Curve Does Not Exist";
+			
 			 
 		}
 		
