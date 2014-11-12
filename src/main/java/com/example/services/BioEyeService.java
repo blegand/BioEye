@@ -29,6 +29,9 @@ package com.example.services;
  * UPDATE A Bacteria Growth Curve (bgc), returns ID of bgc record,  "Invalid Key" on error
  * www.xxx.com/services/bioeye/updateGC/{uuid}/{bgcid}/{title}/{bac}/{bVol}/{mVol}/{temp}/{rpm}
  * 
+ * RETIEVE ALL Users
+ * www.xxx.com/serives/bioeye/getAllUsers
+ * 
  * RETRIEVE ALL Bacteria Growth Curve Objects modified after time ts owned by UUID, ts is the last time you queried. Phone needs to keep track of ts
  * www.xxx.com/services/bioeye/getAllGC/{uuid}/{ts}
  * 
@@ -70,6 +73,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -98,9 +102,16 @@ public class BioEyeService {
 	static HashMap<String, String> idhm = new HashMap<String, String>();   // uid db
 	static HashMap<String, BacteriaGrowthCurve> bgchm = new HashMap<String, BacteriaGrowthCurve>();   // bacteria growth curve db
 
+	// RETRIEVE ALL USers
 	@GET
-	public String get() {
-		return "Who are you?";
+	@Path("/getAllUsers/")
+	public Object[] get(){
+		
+
+		List<User> valueList = new ArrayList<User>(userhm.values());
+		return valueList.toArray();
+				
+		
 	}
 
 	// LOGIN
@@ -289,6 +300,8 @@ public class BioEyeService {
 		return  bgcList.toArray();
 	}
 
+
+	
 	// UPDATE Role Bacteria Growth Curve Object
 	@GET
 	@Path("/updateGCRole/{uuid}/{bgcid}/{uidRole}/{c}/{del}/{det}/{e}/{s}")
