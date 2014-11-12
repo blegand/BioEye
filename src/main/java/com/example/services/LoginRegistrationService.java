@@ -27,14 +27,17 @@ public class LoginRegistrationService {
 	@Path("/login/{user}/{pass}")
 	public String get(@PathParam("user") String user, @PathParam("passwd") String passwd) {
 
-		String uuid = "NONE";
+		String uuid = "NO MATCH";
 		User u = (User) userhm.get(user);
 
 		if(u != null) { // if in the db
 			try {  // is there a match
-
-				if(u.getPasswd().equals(new MD5().getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
+                MD5 m = new MD5();
+                
+				if(u.getPasswd().equals(m.getMD5Hex(passwd)))  // if the MD5(passwd) == Passwd in user DB
 					uuid = u.getId().toString();  // get uuid
+				else
+					uuid = "PASSWORD INCORRECT";
 			} catch (NoSuchAlgorithmException e) {
 
 			}
