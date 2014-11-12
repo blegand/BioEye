@@ -20,7 +20,8 @@ public class BacteriaGrowthCurve {
 	private Date  tstamp;  // time stamp
 	
 	private HashMap<String, GCRoles>  accessList = new HashMap<String, GCRoles>();
-	// private ODPhotos[] photos;
+	
+	private HashMap<String, ODPhotos>  photos = new HashMap<String, ODPhotos>();
 	
 	public BacteriaGrowthCurve(String title, String bac, double bV, double mV, double tmp, double rpm) {
 	
@@ -55,6 +56,29 @@ public class BacteriaGrowthCurve {
 	
 	public GCRoles delRole(String uid){
 		return accessList.remove(uid);
+	}
+	
+	public HashMap<String, ODPhotos> getODPhotosList() {
+		return photos;
+	}
+	
+	public void addODPhotos(ODPhotos p, String uid) {
+		photos.put(uid, p);
+	}
+	
+	public void updateODPhotos(String uid, byte[] photo, double od, Date tstamp, String f) {
+		ODPhotos odp = (ODPhotos) photos.get(uid);
+		odp.setFilename(f);
+		odp.setId(uid);
+		odp.setOd(od);
+		odp.setPhoto(photo);
+		odp.setTstamp(tstamp);
+		
+		photos.put(uid, odp);
+	}
+	
+	public ODPhotos delODPhotos(String uid){
+		return photos.remove(uid);
 	}
 	
 	public UUID getId() {
