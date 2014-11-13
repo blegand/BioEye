@@ -4,13 +4,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
+	
+import quickdt.predictiveModels.decisionTree.Tree;
+import quickdt.predictiveModels.decisionTree.TreeBuilder;
+import quickdt.data.Instance;
 
 @XmlRootElement
 public class BacteriaGrowthCurve {
 
 	private UUID id;   // unique GCObject identifier
-	private String modelFileName;  // filename of the model that is generated
+	//private String modelFileName;  // filename of the model that is generated
 	private String title;  // title of experiment
 	private String bacteria;  // bacteria name
 	private double bVol;  // bacteria volume
@@ -18,6 +23,8 @@ public class BacteriaGrowthCurve {
 	private double temp;  // temperature
 	private double rpm;   // revolutions per minute
 	private Date  tstamp;  // time stamp
+	private Tree tree; // Tree for the Bacteria GrowthCurve
+	private ArrayList<Instance> instances = new ArrayList<Instance>();//Data to create tree
 	
 	private HashMap<String, GCRoles>  accessList = new HashMap<String, GCRoles>();
 	
@@ -66,6 +73,7 @@ public class BacteriaGrowthCurve {
 		photos.put(uid, p);
 	}
 	
+	//FIXME
 	public void updateODPhotos(String uid, byte[] photo, double od, Date tstamp, String f) {
 		ODPhotos odp = (ODPhotos) photos.get(uid);
 		odp.setFilename(f);
@@ -76,7 +84,7 @@ public class BacteriaGrowthCurve {
 		
 		photos.put(uid, odp);
 	}
-	
+	//FIXME
 	public ODPhotos delODPhotos(String uid){
 		return photos.remove(uid);
 	}
@@ -87,12 +95,27 @@ public class BacteriaGrowthCurve {
 	public void setId() {
 		this.id = UUID.randomUUID();
 	}
-	public String getModelFileName() {
+	public Tree getTree() {
+		return tree;
+	}
+	public void setTree(Tree tree) {
+		this.tree = tree;
+	}
+	public void buildTree() {
+		TreeBuilder treeBuilder = new TreeBuilder();
+		tree = treeBuilder.buildPredictiveModel(instances);
+		tree.dump(System.out);  //debugging purposes output tree.
+	}
+	public ArrayList<Instance> getInstances()
+	{
+		return instances;
+	}
+	/*public String getModelFileName() {
 		return modelFileName;
 	}
 	public void setModelFileName(String modelFileName) {
 		this.modelFileName = modelFileName;
-	}
+	}*/
 	public String getTitle() {
 		return title;
 	}

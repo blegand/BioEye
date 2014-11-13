@@ -13,6 +13,8 @@ public class ODPhotos {
 	private double od;   // optical density value for the photo
 	private Date tstamp;  // time photo was taken
 	private String filename;
+	private int start; // out which instances it is
+	private int end;  //to kepp track of the instances
 	
 	public String getFilename() {
 		return filename;
@@ -45,6 +47,22 @@ public class ODPhotos {
 	}
 	public void setTstamp(Date tstamp) {
 		this.tstamp = tstamp;
+	}
+	public int getStart()
+	{
+		return start;
+	}
+	public void setStart(int start)
+	{
+		this.start = start;
+	}
+	public int getEnd()
+	{
+		return end;
+	}
+	public void setEnd(int end)
+	{
+		this.end = end;
 	}
 	
 	public ODPhotos(String id, byte[] photo, double od, Date tstamp, String f) {

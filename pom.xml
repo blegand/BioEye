@@ -8,6 +8,14 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+	<repositories>
+		<!-- quickdt -->
+		<repository>
+			<id>sanity-maven-repo</id>
+			<name>Sanity's Maven repository on GitHub</name>
+			<url>http://sanity.github.com/maven-repo/repository/</url>
+		</repository>
+	</repositories>
     <dependencies>
         <!-- Jetty -->
         <dependency>
@@ -32,6 +40,13 @@
             <artifactId>jersey-json</artifactId>
             <version>1.8</version>
         </dependency>
+
+	<!-- quickdt -->
+		<dependency>
+			<groupId>quickdt</groupId>
+			<artifactId>quickdt</artifactId>
+			<version>0.2.0.8</version>
+		</dependency>
         
         <dependency>
 			<groupId>com.sun.jersey.contribs</groupId>

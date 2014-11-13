@@ -94,6 +94,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import quickdt.data.Attributes;
+import quickdt.data.HashMapAttributes;
+import quickdt.data.Instance;
+import quickdt.predictiveModels.decisionTree.Tree;
+import quickdt.predictiveModels.decisionTree.TreeBuilder;
+import quickdt.predictiveModels.decisionTree.tree.Leaf;
+
 @Path("/bioeye")
 @Produces(MediaType.APPLICATION_JSON)
 public class BioEyeService {
@@ -412,7 +419,10 @@ public class BioEyeService {
 
 		return uuid;
 	}
-
+	//ADD Instances from the ODPHOTO to the Bacteria Growth Curve 
+	/*@POST
+	@Path()
+*/
 	// ADD ODPhoto to Bacteria Growth Curve Object
 	@POST
 	@Path("/addODPhoto/{uuid}/{bgcid}/{od}/{ts}")
@@ -433,10 +443,16 @@ public class BioEyeService {
 
 			//Get GrowthCurve Object
 			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
-
 			if(bgc != null) {
 
 				ODPhotos odp = new ODPhotos(id, b, od, ts, uploadedFileLocation);
+				odp.setStart(bgc.getInstances().size());
+				odp.setEnd(bgc.getInstances().size() + b.length);
+				//uploading the odp to instances
+				for(int i =0; i < b.length; i+=3)
+				{	
+					bgc.getInstances().add(HashMapAttributes.create("h",b[i],"s",b[i+1],"v",b[i+2]).classification(od));	
+				}
 				bgc.addODPhotos(odp, uploadedFileLocation);  // add a photo, use filename as key
 				bgc.setTstamp();
 
@@ -495,7 +511,8 @@ public class BioEyeService {
 			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
 
 			if(bgc != null) {
-				bgc.setModelFileName(bgcid + ".mod");  //filename =  <Bac Growth Curve ID>.mod
+				//check
+				//bgc.setModelFileName(bgcid + ".mod");  //filename =  <Bac Growth Curve ID>.mod
 
 
 				/*******************
@@ -507,6 +524,7 @@ public class BioEyeService {
 				 * WHEN THE CALL TO addODPhotos returns, then call this /generateModel
 				 * 
 				 *******************/
+				bgc.buildTree();
 
 				uuid = bgcid;
 			}
@@ -519,7 +537,7 @@ public class BioEyeService {
 		return uuid;
 	}
 
-	// ADD ODPhoto to Bacteria Growth Curve Object
+	//  Detect Photo to Bacteria Growth Curve Object
 	@POST
 	@Path("/detect/{uuid}/{bgcid}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -555,12 +573,13 @@ public class BioEyeService {
                      * NEED TO RETURN CLOSETS OD VALUE TO DISPLAY ON PHONE, in GRAPH
                      *
                      *******/
-					double response = generatePhotoDistribution(hsv, bgc.getModelFileName());
+					//check
+					//double response = generatePhotoDistribution(hsv, bgc.getModelFileName());
+					double odvalue = generatePhotoDistribution(hsv, bgc.getTree());
 					
-                    double threshold = 80;  // CHANGE THRESHOLD VALUE
 					
-					if(response > threshold)  // if response is > 80, then success
-						uuid = "ACK:" +  response;  // found a match, return OD Value, to phone to Plot
+					if(odvalue > 0)  // if response is > 80, then success
+						uuid = "ACK:" +  odvalue;  // found a match, return OD Value, to phone to Plot
 					else
 						uuid = "NACK: No Match";
 
@@ -577,8 +596,9 @@ public class BioEyeService {
 		return uuid;
 
 	}
-	
-	private double generatePhotoDistribution(byte[] hsv, String modelFile) {
+
+	// return the OD value of the photo
+	private double generatePhotoDistribution(byte[] hsv, Tree model) {
 		
 		 /************************************
          * 
@@ -587,7 +607,35 @@ public class BioEyeService {
          * NEED TO RETURN CLOSETS OD VALUE TO DISPLAY ON PHONE, in GRAPH
          *
          *******/
-		return 80.0;
+		HashMap<String,Integer> histogram = new HashMap<String,Integer>();
+		for(int i =0; i < hsv.length; i+=3)
+		{
+			Attributes attributes = HashMapAttributes.create("h",hsv[i],"s",hsv[i+1],"v",hsv[i+2]);
+			String answer = (String)model.getClassificationByMaxProb(attributes);
+			if(histogram.containsKey(answer))
+			{
+				Integer count = histogram.get(answer);
+				histogram.put(answer,count+1);
+
+			}
+			else
+			{
+				histogram.put(answer,1);
+			}
+			
+		}
+		int highest = 0;
+		String value ="-1";
+		for(Map.Entry<String,Integer> dist : histogram.entrySet())
+		{
+			if(dist.getValue() > highest)
+			{
+				value = dist.getKey();
+				highest =  dist.getValue();
+
+			}
+		}
+		return Double.parseDouble(value);
 	}
 
 
