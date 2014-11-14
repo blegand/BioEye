@@ -54,6 +54,14 @@
 			<version>1.8</version>
 		</dependency>
 
+	<!-- gson -->
+<!-- gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.2.4</version>
+		</dependency>
+
         <!-- jUnit -->
         <dependency>
             <groupId>junit</groupId>

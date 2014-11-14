@@ -82,6 +82,7 @@ import com.example.models.GCRoles;
 import com.example.models.MD5;
 import com.example.models.ODPhotos;
 import com.example.models.User;
+import com.example.models.Pixel;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -93,6 +94,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import quickdt.data.Attributes;
 import quickdt.data.HashMapAttributes;
@@ -100,6 +102,12 @@ import quickdt.data.Instance;
 import quickdt.predictiveModels.decisionTree.Tree;
 import quickdt.predictiveModels.decisionTree.TreeBuilder;
 import quickdt.predictiveModels.decisionTree.tree.Leaf;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 @Path("/bioeye")
 @Produces(MediaType.APPLICATION_JSON)
@@ -425,6 +433,105 @@ public class BioEyeService {
 */
 	// ADD ODPhoto to Bacteria Growth Curve Object
 	@POST
+	@Path("/addODPhoto")
+	public Response result(String data)
+	{
+		
+		Gson gson = new Gson();
+		JsonElement element = gson.fromJson(data, JsonElement.class);
+		JsonObject obj = element.getAsJsonObject();
+		String uid = obj.get("uuid").getAsString();
+		String bgcid = obj.get("bgcid").getAsString();
+		Double od = obj.get("od").getAsDouble();
+		String ts = obj.get("ts").getAsString();
+		JsonObject reply = new JsonObject();
+
+
+		String id = (String) idhm.get(uid);  //user id
+		String uuid = "Invalid Key";
+
+		if(id != null) {  // user is  valid
+
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+			if(bgc != null) {
+				//FIXME
+
+				//ODPhotos odp = new ODPhotos(id, b, od, ts, uploadedFileLocation);
+				//odp.setStart(bgc.getInstances().size());
+				//odp.setEnd(bgc.getInstances().size() + b.length);
+
+				JsonArray pixels = (JsonArray) obj.get("data");
+				for(int i = 0; i < pixels.size(); i++)
+				{
+					Pixel temp = gson.fromJson(pixels.get(i), Pixel.class);
+					bgc.getInstances().add(temp.getAttributes().classification(od));
+					
+				}
+				//bgc.addODPhotos(odp, uploadedFileLocation);  // add a photo, use filename as key
+				//bgc.setTstamp();
+
+				//uuid = odp.getId();
+				uuid = "ACK: ODP Added to Bacteria Growth Curve";
+			}
+			else
+				uuid = "NACK: Bacteria Growth Curve Does Not Exist";
+
+
+		}
+
+		//return uuid;
+		reply.addProperty("res", uuid);
+		
+		
+		return Response.status(200)
+				.entity(reply.toString())
+				.build();
+		
+	}
+/*
+	public String get(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid, @PathParam("od") double od, @PathParam("ts") Date ts,) {
+
+		String uploadedFileLocation = "/" + fileDetail.getFileName();
+		byte[] b;
+
+		// save it
+		b = writeToFile(uploadedInputStream, uploadedFileLocation);
+
+
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+
+		if(id != null) {  // user is  valid
+
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+			if(bgc != null) {
+
+				ODPhotos odp = new ODPhotos(id, b, od, ts, uploadedFileLocation);
+				odp.setStart(bgc.getInstances().size());
+				odp.setEnd(bgc.getInstances().size() + b.length);
+				//uploading the odp to instances
+				for(int i =0; i < b.length; i+=3)
+				{	
+					bgc.getInstances().add(HashMapAttributes.create("h",b[i],"s",b[i+1],"v",b[i+2]).classification(od));	
+				}
+				bgc.addODPhotos(odp, uploadedFileLocation);  // add a photo, use filename as key
+				bgc.setTstamp();
+
+				uuid = odp.getId();
+			}
+			else
+				uuid = "NACK: Bacteria Growth Curve Does Not Exist";
+
+
+		}
+
+		return uuid;
+	}
+*/
+	// ADD ODPhoto to Bacteria Growth Curve Object
+	@POST
 	@Path("/addODPhoto/{uuid}/{bgcid}/{od}/{ts}")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public String get(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid, @PathParam("od") double od, @PathParam("ts") Date ts,@FormDataParam("file") InputStream uploadedInputStream, @FormDataParam("file") FormDataContentDisposition fileDetail) {
@@ -539,8 +646,56 @@ public class BioEyeService {
 
 	//  Detect Photo to Bacteria Growth Curve Object
 	@POST
+	@Path("/detect")
+	public Response detect(String data){
+		Gson gson = new Gson();
+		JsonElement element = gson.fromJson(data, JsonElement.class);
+		JsonObject obj = element.getAsJsonObject();
+		String uid = obj.get("uuid").getAsString();
+		String bgcid = obj.get("bgcid").getAsString();
+		JsonObject reply = new JsonObject();
+
+
+		String uuid = "Invalid Key";
+		String id = (String) idhm.get(uid);  //user id
+		JsonArray pixels = (JsonArray) obj.get("data");
+
+		if(id != null) {  // user is  valid
+
+			//Get GrowthCurve Object
+			BacteriaGrowthCurve bgc = (BacteriaGrowthCurve) bgchm.get(bgcid);
+
+			if(bgc != null) {
+
+
+					//check
+					double odvalue = generatePhotoDistribution(pixels, bgc.getTree());
+					
+					
+					if(odvalue > 0)  // if response is > 80, then success
+						uuid = "ACK:" +  odvalue;  // found a match, return OD Value, to phone to Plot
+					else
+						uuid = "NACK: No Match";
+
+			}
+			else
+				uuid = "NACK: Bacteria Growth Curve Does Not Exist";
+
+		}
+		reply.addProperty("res", uuid);
+		
+		
+		return Response.status(200)
+				.entity(reply.toString())
+				.build();
+		
+
+
+	}
+
+	//  Detect Photo to Bacteria Growth Curve Object
+	@POST
 	@Path("/detect/{uuid}/{bgcid}")
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	public String get(@PathParam("uuid") String uid, @PathParam("bgcid") String bgcid,@FormDataParam("file") InputStream uploadedInputStream) {
 
 		byte[] hsv;
@@ -575,8 +730,9 @@ public class BioEyeService {
                      *******/
 					//check
 					//double response = generatePhotoDistribution(hsv, bgc.getModelFileName());
-					double odvalue = generatePhotoDistribution(hsv, bgc.getTree());
-					
+					//double odvalue = generatePhotoDistribution(hsv, bgc.getTree());
+					//FIXME
+					double odvalue = 80;
 					
 					if(odvalue > 0)  // if response is > 80, then success
 						uuid = "ACK:" +  odvalue;  // found a match, return OD Value, to phone to Plot
@@ -598,7 +754,7 @@ public class BioEyeService {
 	}
 
 	// return the OD value of the photo
-	private double generatePhotoDistribution(byte[] hsv, Tree model) {
+	private double generatePhotoDistribution(JsonArray hsv, Tree model) {
 		
 		 /************************************
          * 
@@ -608,10 +764,11 @@ public class BioEyeService {
          *
          *******/
 		HashMap<String,Integer> histogram = new HashMap<String,Integer>();
-		for(int i =0; i < hsv.length; i+=3)
+		for(int i =0; i < hsv.size(); i++)
 		{
-			Attributes attributes = HashMapAttributes.create("h",hsv[i],"s",hsv[i+1],"v",hsv[i+2]);
-			String answer = (String)model.getClassificationByMaxProb(attributes);
+			Gson gson = new Gson();
+			Pixel temp = gson.fromJson(hsv.get(i), Pixel.class);
+			String answer = (String)model.getClassificationByMaxProb(temp.getAttributes());
 			if(histogram.containsKey(answer))
 			{
 				Integer count = histogram.get(answer);
